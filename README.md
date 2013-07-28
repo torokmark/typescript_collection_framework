@@ -1,8 +1,8 @@
-typescript_collection_framework
+Typescript Collection Framework
 ===============================
 
-Collection framework for TypeScript
+Our aim is to extend TypeScript with this module that ensure well-known collections and interfaces from Java and C#.
 
-Contributors:
+Co-contributors:
 
 * Szabó Toto
