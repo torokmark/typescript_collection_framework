@@ -1,8 +1,11 @@
 ///<reference path="../qunit.d.ts" />
-///<reference path="../lib/hashset.ts" />
+//<reference path="../lib/hashset.ts" />
+
+import q = require("../lib/hashset");
+
 
 QUnit.test("deepEqual test", function () {
-    var obj = new Collections.HashSet();
+    var obj = new q.Collections.HashSet();
 
     QUnit.deepEqual(obj, { foo: "bar" }, "Two objects can be the same in value");
 });
