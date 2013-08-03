@@ -1,22 +1,3 @@
-<<<<<<< HEAD
-module Collections {
-    export interface IComparer<T> {
-        compare(x: T, y: T) : number;
-    }
-    
-    export interface IEnumerator<T> {
-        reset() : IEnumerator<T>;
-        moveNext(): boolean;
-        dispose?();
-        current: T; //getter
-    }
-
-    export interface IEnumerable<T>  {
-        getEnumerator() : IEnumerator<T>;
-        toArray(): T[];
-        //Extension method
-    }
-=======
 export module Collections {
 	export interface IComparer<T> {
 		compare(x: T, y: T) : number;
@@ -29,50 +10,15 @@ export module Collections {
 		current: T; //getter
 	}
 
-	export interface IEnumerable<T>  {
-		reset();
-		moveNext(): boolean;
-		dispose?();
-		current: T; //getter
+	export interface IEnumerable<T> {
+		getEnumerator(): IEnumerator<T>;
 		toArray(): T[];
-		//Extension method
 	}
->>>>>>> refs/remotes/typescript_collection_framework.git/master
 
-    export interface ICollection<T> extends IEnumerable<T> {
-        count: number;  //getter
-        isReadOnly: boolean;    //getter
+	export interface ICollection<T> extends IEnumerable<T> {
+		count: number;	//getter
+		isReadOnly: boolean;	//getter
 
-<<<<<<< HEAD
-        add(item: T): ICollection<T>;
-        clear(): ICollection<T>;
-        contains(item: T): boolean;
-        copyTo(array: T[], arrayIndex: number): ICollection<T>;
-        remove(item: T): boolean;
-    }
-
-    export interface IList<T> extends ICollection<T>, IEnumerable<T> {
-        at(index: number): T;
-        [index: number]: T;
-        indexOf(item: T): number;
-        insert(index: number, item: T): IList<T>;
-        remove(item: T): boolean;
-        removeAt(index: number): IList<T>;
-    }
-
-    export interface ISet<T> extends ICollection<T>, IEnumerable<T> {
-        exceptWith(other: IEnumerable<T>): ISet<T>;
-        intersectWith(other: IEnumerable<T>): ISet<T>;
-        isProperSubsetOf(other: IEnumerable<T>): boolean;
-        isProperSupersetOf(other: IEnumerable<T>): boolean;
-        isSubsetOf(other: IEnumerable<T>): boolean;
-        isSupersetOf(other: IEnumerable<T>): boolean;
-        overlaps(other: IEnumerable<T>): boolean;
-        setEquals(other: IEnumerable<T>): boolean;
-        symmetricExceptWith(other: IEnumerable<T>): boolean;
-        unionWith(other: IEnumerable<T>): ISet<T>;
-    }
-=======
 		add(item: T): ICollection<T>;
 		clear(): ICollection<T>;
 		contains(item: T): boolean;
@@ -101,24 +47,12 @@ export module Collections {
 		symmetricExceptWith(other: IEnumerable<T>): ISet<T>;
 		unionWith(other: IEnumerable<T>): ISet<T>;
 	}
->>>>>>> refs/remotes/typescript_collection_framework.git/master
 
-    export interface IKeyValuePair<TKey, TValue> {
-        key: TKey;
-        value: TValue;
-    }
+	export interface IKeyValuePair<TKey, TValue> {
+		key: TKey;
+		value: TValue;
+	}
 
-<<<<<<< HEAD
-    export interface IDictionary<TKey, TValue> extends ICollection<IKeyValuePair<TKey, TValue>>, 
-                                                       IEnumerable<IKeyValuePair<TKey, TValue>> {
-        at(key: TKey): TValue;
-        keys: ICollection<TKey>;
-        values: ICollection<TValue>;
-        containsKey(key: TKey): boolean;
-        removeByKey(key: TKey): boolean;
-        tryGetValue(key: TKey, callbackValue: (value: TValue) => void): boolean;
-    }
-=======
 	export interface IDictionary<TKey, TValue> extends ICollection<IKeyValuePair<TKey, TValue>>, 
 													   IEnumerable<IKeyValuePair<TKey, TValue>> {
 		at(key: TKey): TValue;
@@ -128,10 +62,10 @@ export module Collections {
 		removeByKey(key: TKey): IDictionary<TKey, TValue>;
 		tryGetValue(key: TKey, callbackValue: (value: TValue) => void): boolean;
 	}
->>>>>>> refs/remotes/typescript_collection_framework.git/master
 
-    export interface IEqualityComparer<T> {
-        equals(x: T, y: T): boolean;
-        getHashCode(obj: T): number;
-    }
+	export interface IEqualityComparer<T> {
+		equals(x: T, y: T): boolean;
+		getHashCode(obj: T): number;
+	}
+	var a = 10;
 }

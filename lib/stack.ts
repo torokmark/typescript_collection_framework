@@ -1,28 +1,39 @@
 ///<reference path="interfaces.ts" />
 
+import my = require("interfaces");
+
 module Collections {
-    export class Stack<T> implements IEnumerable<T>, ICollection<T> {
+
+    class StackEnumerator<T> implements my.Collections.IEnumerator<T> {
+        private stack: Stack<T>;
+        private index: number;
+
+        constructor(stack: Stack<T>) {
+            this.stack = stack;
+            this.reset();
+        }
+
+        public reset() {
+            this.index = 0;
+            return this;
+        }
+
+        public moveNext(): boolean {
+            var result = this.index < this.stack.count;
+            this.index++;
+            return result; 
+        }
+
+        public get current(): T {
+            return this.stack.toArray()[this.index];
+        }
+    }
+
+    export class Stack<T> implements my.Collections.IEnumerable<T>, my.Collections.ICollection<T> {
         private array: T[];
 
-        getEnumerator() : IEnumerator<T> {
-            var getCurrent = function() { 
-                    return this.array.length > currentIndex ? this.array[currentIndex] : undefined;
-                },
-                currentIndex = 0,
-                moveNext = function() {
-                    currentIndex++;
-                    var current = getCurrent();
-                    return this.array.length > currentIndex;
-                },
-                reset = function() {
-                    currentIndex = 0;
-                };
-
-            return {
-                current: getCurrent(),
-                moveNext: moveNext,
-                reset: function() { reset(); return this; }
-            };
+        getEnumerator() : my.Collections.IEnumerator<T> {
+            return new StackEnumerator<T>(this);
         }
 
         get count(): number {
@@ -59,12 +70,11 @@ module Collections {
             return this;
         }
 
-        remove(item: T): boolean {
+        remove(item: T) {
             var index = this.array.indexOf(item);
-            if (index === -1)
-                return false;
-            this.array.splice(index, 1);
-            return true;
+            if (index !== -1)
+                this.array.splice(index, 1);
+            return this;
         }
 
         pop(): T {
@@ -84,7 +94,7 @@ module Collections {
             return this.array;
         }
 
-        private initializeFromCollection(collection: IEnumerable<T>) {
+        private initializeFromCollection(collection: my.Collections.IEnumerable<T>) {
             var enumerator = collection.getEnumerator();
             enumerator.reset();
             
@@ -95,7 +105,7 @@ module Collections {
             return this;
         }
 
-        public constructor(collection?: IEnumerable<T>) {
+        public constructor(collection?: my.Collections.IEnumerable<T>) {
             if (collection)
                 this.initializeFromCollection(collection);
         }
