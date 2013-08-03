@@ -7,11 +7,11 @@ Our aim is to extend TypeScript with this module that ensure well-known collecti
 ## Requirements ##
 
 * TypeScript
-	http://www.typescriptlang.org/
+	* http://www.typescriptlang.org/
 
 * QUnit
-	https://npmjs.org/package/qunit
-	https://github.com/kof/node-qunit
+	* https://npmjs.org/package/qunit
+	* https://github.com/kof/node-qunit
 
 ## Compile ##
 
