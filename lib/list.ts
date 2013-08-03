@@ -111,5 +111,88 @@ module Collections {
 		public toArray(): T[] {
 			return this.list;
 		}
+
+		public exists(match: (item: T) => boolean) : boolean {
+			var result = false;
+			var enumerator = this.getEnumerator().reset();
+
+			while (enumerator.moveNext() && result) {
+				result = match(enumerator.current);
+			}
+
+			return result;
+		}
+
+		public find(match: (item: T) => boolean) : T {
+			for (var i = 0; i < this.list.length; ++i) {
+				if (match(this.list[i]))
+					return this.list[i];
+			}
+			return undefined;
+		}
+
+		public findAll(match: (item: T) => boolean) : List<T> {
+			var result = new List<T>();
+
+			for (var i = 0; i < this.list.length; ++i) {
+				if (match(this.list[i]))
+					result.add(this.list[i]);
+			}
+
+			return result;
+		}
+
+		public findIndex(param: { startIndex?: number; count?: number; match: (item: T) => boolean; }): number {
+			if (!param.startIndex)
+				param.startIndex = 0;
+
+			if (!param.count)
+				param.count = 1;
+
+			var found = 0;
+
+			for (var i = 0; i < this.list.length; ++i) {
+				if (param.match(this.list[i])) {
+					found++;
+					if (found === param.count)
+						return i;
+				}			
+			}
+						
+			return -1;
+		}
+
+		public findLast(match: (item: T) => boolean) : T {
+			for (var i = (this.list.length - 1); i >= 0; --i) {
+				if (match(this.list[i]))
+					return this.list[i];
+			}
+			return undefined;
+		}
+
+		public forEach(action: (item: T) => void) {
+			if (!action)
+				throw "'action' parameter of 'forEach' must be defined!";
+
+			for (var i = 0; i < this.list.length; ++i) {
+				action(this.list[i]);
+			}
+
+			return this;
+		}
+
+		public getRange(param: { index: number; count?: number; }) {
+			var result = new List<T>();
+
+			var end = param.count ? param.index + param.count : this.list.length;
+
+			for (var i = param.index; i < end; ++i) {
+				result.add(this.list[i]);
+			}
+
+			return result;
+		}
+
+
 	}
 }
