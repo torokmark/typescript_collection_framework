@@ -1,4 +1,4 @@
-module Collections {
+export module Collections {
 	export interface IComparer<T> {
 		compare(x: T, y: T) : number;
 	}
@@ -24,7 +24,7 @@ module Collections {
 		clear(): ICollection<T>;
 		contains(item: T): boolean;
 		copyTo(array: T[], arrayIndex: number): ICollection<T>;
-		remove(item: T): boolean;
+		remove(item: T): ICollection<T>;
 	}
 
 	export interface IList<T> extends ICollection<T>, IEnumerable<T> {
@@ -32,12 +32,12 @@ module Collections {
 		[index: number]: T;
 		indexOf(item: T): number;
 		insert(index: number, item: T): IList<T>;
-		remove(item: T): boolean;
+		remove(item: T): IList<T>;
 		removeAt(index: number): IList<T>;
 	}
 
 	export interface ISet<T> extends ICollection<T>, IEnumerable<T> {
-		exceptWith(other: IEnumerable<T>): ISet<T>;
+		//exceptWith(other: IEnumerable<T>): ISet<T>;
 		intersectWith(other: IEnumerable<T>): ISet<T>;
 		isProperSubsetOf(other: IEnumerable<T>): boolean;
 		isProperSupersetOf(other: IEnumerable<T>): boolean;
@@ -45,7 +45,7 @@ module Collections {
 		isSupersetOf(other: IEnumerable<T>): boolean;
 		overlaps(other: IEnumerable<T>): boolean;
 		setEquals(other: IEnumerable<T>): boolean;
-		symmetricExceptWith(other: IEnumerable<T>): boolean;
+		symmetricExceptWith(other: IEnumerable<T>): ISet<T>;
 		unionWith(other: IEnumerable<T>): ISet<T>;
 	}
 
@@ -60,7 +60,7 @@ module Collections {
 		keys: ICollection<TKey>;
 		values: ICollection<TValue>;
 		containsKey(key: TKey): boolean;
-		removeByKey(key: TKey): boolean;
+		removeByKey(key: TKey): IDictionary<TKey, TValue>;
 		tryGetValue(key: TKey, callbackValue: (value: TValue) => void): boolean;
 	}
 

@@ -1,11 +1,13 @@
-///<reference path="interfaces.ts" />
 
-module Collections {
-    export class HashSet<T> implements ISet<T>, IEnumerator<T> {
+import M = require("interfaces");
+
+
+export module Collections {
+    export class HashSet<T> implements M.Collections.ISet<T>, M.Collections.IEnumerator<T> {
         private set: T[];
         private index: number = -1;
 
-        constructor(collection?: IEnumerable<T>) {
+        constructor(collection?: M.Collections.IEnumerable<T>) {
             if (collection) {
                 this.initializeFromCollection(collection);
             }
@@ -51,7 +53,7 @@ module Collections {
             return this;
         }
 
-        public exceptWith(other: IEnumerable<T>) {
+        public exceptWith(other: M.Collections.IEnumerable<T>): M.Collections.ISet<T> {
             var en = other.getEnumerator();
             en.reset();
 
@@ -64,11 +66,11 @@ module Collections {
             return this;
         }
 
-        public getEnumerator(): IEnumerator<T> {
+        public getEnumerator(): M.Collections.IEnumerator<T> {
             return undefined;
         }
 
-        public intersectWith(other: IEnumerable<T>): ISet<T> {
+        public intersectWith(other: M.Collections.IEnumerable<T>): M.Collections.ISet<T> {
             var newSet = new HashSet(),
                 en = other.getEnumerator();
 
@@ -85,7 +87,7 @@ module Collections {
             return this;
         }
 
-        public isProperSubsetOf(other: IEnumerable<T>): boolean {
+        public isProperSubsetOf(other: M.Collections.IEnumerable<T>): boolean {
             var arr = other.toArray(),
                 i = 0,
                 max;
@@ -101,7 +103,7 @@ module Collections {
             return true;
         }
 
-        public isProperSupersetOf(other: IEnumerable<T>): boolean {
+        public isProperSupersetOf(other: M.Collections.IEnumerable<T>): boolean {
             var en = other.getEnumerator();
             en.reset();
 
@@ -116,7 +118,7 @@ module Collections {
             return true;
         }
 
-        public isSubsetOf(other: IEnumerable<T>): boolean {
+        public isSubsetOf(other: M.Collections.IEnumerable<T>): boolean {
             var arr = other.toArray(),
                 i = 0,
                 max;
@@ -132,7 +134,7 @@ module Collections {
             return true;
         }
 
-        public isSupersetOf(other: IEnumerable<T>): boolean {
+        public isSupersetOf(other: M.Collections.IEnumerable<T>): boolean {
             var en = other.getEnumerator();
             en.reset();
 
@@ -147,7 +149,7 @@ module Collections {
             return true;
         }
 
-        public overlaps(other: IEnumerable<T>): boolean {
+        public overlaps(other: M.Collections.IEnumerable<T>): boolean {
             var en = other.getEnumerator();
             en.reset();
 
@@ -159,26 +161,22 @@ module Collections {
             return false;
         }
 
-        public remove(item: T): boolean {
+        public remove(item: T): M.Collections.ISet<T> {
             var index = this.set.indexOf(item);
-            if (index === -1) {
-                return false;
+            if (index !== -1) {
+                this.set.splice(index, 1);
             }
-            this.set.splice(index, 1);
-            return true;
+            return this;
         }
 
-        public removeAll(collection: ICollection<T>): boolean {
-            var en = collection.getEnumerator(),
-                ret = true;
+        public removeAll(collection: M.Collections.ICollection<T>): M.Collections.ISet<T> {
+            var en = collection.getEnumerator();
             en.reset();
 
             while(en.moveNext()) {
-                if (!this.remove(en.current)) {
-                    ret = false
-                }
+                this.remove(en.current);
             }
-            return ret;
+            return this;
         }
 
         public removeWhere(predicate: (t: T) => boolean) : boolean {
@@ -193,7 +191,7 @@ module Collections {
             return true;
         }
 
-        public setEquals(other: IEnumerable<T>): boolean {
+        public setEquals(other: M.Collections.IEnumerable<T>): boolean {
             var en = other.getEnumerator();
             en.reset();
 
@@ -205,15 +203,15 @@ module Collections {
             return true;
         }
 
-        public symmetricExceptWith(other: IEnumerable<T>): boolean {
-            return true;
+        public symmetricExceptWith(other: M.Collections.IEnumerable<T>): M.Collections.ISet<T> {
+            return this;
         }
 
         public toArray(): T[] {
             return this.set;
         }
 
-        public unionWith(other: IEnumerable<T>) {
+        public unionWith(other: M.Collections.IEnumerable<T>) {
             var en = other.getEnumerator();
             en.reset();
 
@@ -233,7 +231,7 @@ module Collections {
         }
 
 
-        private initializeFromCollection(collection: IEnumerable<T>) {
+        private initializeFromCollection(collection: M.Collections.IEnumerable<T>): HashSet<T> {
             var enumerator = collection.getEnumerator();
             enumerator.reset();
             
