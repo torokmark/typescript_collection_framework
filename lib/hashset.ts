@@ -46,7 +46,7 @@ export module Collections {
         }
 
         public copyTo(array: T[], arrayIndex: number) {
-            for (var i = arrayIndex; i < array.length; ++i) {
+            for (var i = arrayIndex; i < array.length; i += 1) {
                 this.add(array[i]);
             }
 
@@ -76,8 +76,7 @@ export module Collections {
 
             while (other.moveNext()) {
                 var t: T = other.current;
-                var index = this.set.indexOf(t);
-                if (index > -1) {
+                if (this.contains(t)) {
                     newSet.add(t);
                 }
             }
@@ -188,6 +187,9 @@ export module Collections {
         public setEquals(other: M.Collections.IEnumerable<T>): boolean {
             other.reset();
 
+            if (other.toArray().length !== this.set.length) {
+                return false;
+            }
             while(other.moveNext()) {
                 if (!this.contains(other.current)) {
                     return false;
@@ -204,7 +206,7 @@ export module Collections {
             return this.set;
         }
 
-        public unionWith(other: M.Collections.IEnumerable<T>) {
+        public unionWith(other: M.Collections.IEnumerable<T>): M.Collections.ISet<T> {
             other.reset();
 
             while(other.moveNext()) {
