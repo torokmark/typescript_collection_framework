@@ -54,11 +54,10 @@ export module Collections {
         }
 
         public exceptWith(other: M.Collections.IEnumerable<T>): M.Collections.ISet<T> {
-            var en = other.getEnumerator();
-            en.reset();
+            other.reset();
 
-            while (en.moveNext()) {
-                var index = this.set.indexOf(en.current);
+            while (other.moveNext()) {
+                var index = this.set.indexOf(other.current);
                 if (index > -1) {
                     this.set.splice(index, 1);
                 }
@@ -71,13 +70,12 @@ export module Collections {
         }
 
         public intersectWith(other: M.Collections.IEnumerable<T>): M.Collections.ISet<T> {
-            var newSet = new HashSet(),
-                en = other.getEnumerator();
+            var newSet = new HashSet();
 
-            en.reset();
+            other.reset();
 
-            while (en.moveNext()) {
-                var t: T = en.current;
+            while (other.moveNext()) {
+                var t: T = other.current;
                 var index = this.set.indexOf(t);
                 if (index > -1) {
                     newSet.add(t);
@@ -104,14 +102,13 @@ export module Collections {
         }
 
         public isProperSupersetOf(other: M.Collections.IEnumerable<T>): boolean {
-            var en = other.getEnumerator();
-            en.reset();
+            other.reset();
 
             if (this.set.length <= other.toArray().length) {
                 return false;
             }
-            while(en.moveNext()) {
-                if (!this.contains(en.current)) {
+            while(other.moveNext()) {
+                if (!this.contains(other.current)) {
                     return false;
                 }
             }
@@ -135,14 +132,13 @@ export module Collections {
         }
 
         public isSupersetOf(other: M.Collections.IEnumerable<T>): boolean {
-            var en = other.getEnumerator();
-            en.reset();
+            other.reset();
 
             if (this.set.length < other.toArray().length) {
                 return false;
             }
-            while(en.moveNext()) {
-                if (!this.contains(en.current)) {
+            while(other.moveNext()) {
+                if (!this.contains(other.current)) {
                     return false;
                 }
             }
@@ -150,11 +146,10 @@ export module Collections {
         }
 
         public overlaps(other: M.Collections.IEnumerable<T>): boolean {
-            var en = other.getEnumerator();
-            en.reset();
+            other.reset();
 
-            while(en.moveNext()) {
-                if (this.contains(en.current)) {
+            while(other.moveNext()) {
+                if (this.contains(other.current)) {
                     return true;
                 }
             }
@@ -170,11 +165,10 @@ export module Collections {
         }
 
         public removeAll(collection: M.Collections.ICollection<T>): M.Collections.ISet<T> {
-            var en = collection.getEnumerator();
-            en.reset();
+            collection.reset();
 
-            while(en.moveNext()) {
-                this.remove(en.current);
+            while(collection.moveNext()) {
+                this.remove(collection.current);
             }
             return this;
         }
@@ -192,11 +186,10 @@ export module Collections {
         }
 
         public setEquals(other: M.Collections.IEnumerable<T>): boolean {
-            var en = other.getEnumerator();
-            en.reset();
+            other.reset();
 
-            while(en.moveNext()) {
-                if (!this.contains(en.current)) {
+            while(other.moveNext()) {
+                if (!this.contains(other.current)) {
                     return false;
                 }
             }
@@ -212,11 +205,10 @@ export module Collections {
         }
 
         public unionWith(other: M.Collections.IEnumerable<T>) {
-            var en = other.getEnumerator();
-            en.reset();
+            other.reset();
 
-            while(en.moveNext()) {
-                this.add(en.current);
+            while(other.moveNext()) {
+                this.add(other.current);
             }
             return this;
         }
@@ -232,11 +224,10 @@ export module Collections {
 
 
         private initializeFromCollection(collection: M.Collections.IEnumerable<T>): HashSet<T> {
-            var enumerator = collection.getEnumerator();
-            enumerator.reset();
+            collection.reset();
             
-            while (enumerator.moveNext()) {
-                this.add(enumerator.current);
+            while (collection.moveNext()) {
+                this.add(collection.current);
             }
 
             return this;

@@ -11,7 +11,10 @@ export module Collections {
 	}
 
 	export interface IEnumerable<T>  {
-		getEnumerator() : IEnumerator<T>;
+		reset();
+		moveNext(): boolean;
+		dispose?();
+		current: T; //getter
 		toArray(): T[];
 		//Extension method
 	}
@@ -37,7 +40,7 @@ export module Collections {
 	}
 
 	export interface ISet<T> extends ICollection<T>, IEnumerable<T> {
-		//exceptWith(other: IEnumerable<T>): ISet<T>;
+		exceptWith(other: IEnumerable<T>): ISet<T>;
 		intersectWith(other: IEnumerable<T>): ISet<T>;
 		isProperSubsetOf(other: IEnumerable<T>): boolean;
 		isProperSupersetOf(other: IEnumerable<T>): boolean;
