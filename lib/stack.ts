@@ -1,88 +1,103 @@
 ///<reference path="interfaces.ts" />
 
 module Collections {
-	export class Stack<T> implements IEnumerable<T>, ICollection<T> {
-		private array: T[];
+    export class Stack<T> implements IEnumerable<T>, ICollection<T> {
+        private array: T[];
 
-		getEnumerator() : IEnumerator<T> {
-			return undefined;
-		}
+        getEnumerator() : IEnumerator<T> {
+            var getCurrent = function() { 
+                    return this.array.length > currentIndex ? this.array[currentIndex] : undefined;
+                },
+                currentIndex = 0,
+                moveNext = function() {
+                    currentIndex++;
+                    var current = getCurrent();
+                    return this.array.length > currentIndex;
+                },
+                reset = function() {
+                    currentIndex = 0;
+                };
 
-		get count(): number {
-			return this.array.length;
-		}	
+            return {
+                current: getCurrent(),
+                moveNext: moveNext,
+                reset: function() { reset(); return this; }
+            };
+        }
 
-		get isReadOnly(): boolean {
-			return false;
-		}	
+        get count(): number {
+            return this.array.length;
+        }   
 
-		add(item: T) {
-			this.array.push(item);
-			return this;
-		}
+        get isReadOnly(): boolean {
+            return false;
+        }   
 
-		clear() {
-			this.array = [];
-			return this;
-		}
+        add(item: T) {
+            this.array.push(item);
+            return this;
+        }
 
-		contains(item: T): boolean {
-			for (var key in this.array) {
-				if (this.array[key] === item)
-					return true;
-			}
-			return false;
-		}
+        clear() {
+            this.array = [];
+            return this;
+        }
 
-		copyTo(array: T[], arrayIndex: number) {
-			for (var i = arrayIndex; i < array.length; ++i) {
-				this.add(array[i]);
-			}
+        contains(item: T): boolean {
+            for (var key in this.array) {
+                if (this.array[key] === item)
+                    return true;
+            }
+            return false;
+        }
 
-			return this;
-		}
+        copyTo(array: T[], arrayIndex: number) {
+            for (var i = arrayIndex; i < array.length; ++i) {
+                this.add(array[i]);
+            }
 
-		remove(item: T): boolean {
-			var index = this.array.indexOf(item);
-			if (index === -1)
-				return false;
-			this.array.splice(index, 1);
-			return true;
-		}
+            return this;
+        }
 
-		pop(): T {
-			return this.array.pop();
-		}
+        remove(item: T): boolean {
+            var index = this.array.indexOf(item);
+            if (index === -1)
+                return false;
+            this.array.splice(index, 1);
+            return true;
+        }
 
-		peek(): T {
-			return this.array[this.array.length - 1];
-		}
+        pop(): T {
+            return this.array.pop();
+        }
 
-		push(item: T) {
-			this.array.push(item);
-			return this;
-		}
+        peek(): T {
+            return this.array[this.array.length - 1];
+        }
 
-		toArray(): T[] {
-			return this.array;
-		}
+        push(item: T) {
+            this.array.push(item);
+            return this;
+        }
 
-		private initializeFromCollection(collection: IEnumerable<T>) {
-			var enumerator = collection.getEnumerator();
-			enumerator.reset();
-			
-			while (enumerator.moveNext()) {
-				this.add(enumerator.current);
-			}
+        toArray(): T[] {
+            return this.array;
+        }
 
-			return this;
-		}
+        private initializeFromCollection(collection: IEnumerable<T>) {
+            var enumerator = collection.getEnumerator();
+            enumerator.reset();
+            
+            while (enumerator.moveNext()) {
+                this.add(enumerator.current);
+            }
 
-		public constructor(collection?: IEnumerable<T>) {
-			if (collection)
-				this.initializeFromCollection(collection);
-		}
-	}
+            return this;
+        }
 
-	var stack: Stack<number> = new Stack<number>();
+        public constructor(collection?: IEnumerable<T>) {
+            if (collection)
+                this.initializeFromCollection(collection);
+        }
+    }
 }
