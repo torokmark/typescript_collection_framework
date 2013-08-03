@@ -4,7 +4,7 @@ import M = require("interfaces");
 
 export module Collections {
     export class HashSet<T> implements M.Collections.ISet<T>, M.Collections.IEnumerator<T> {
-        private set: T[];
+        private set: T[] = [];
         private index: number = -1;
 
         constructor(collection?: M.Collections.IEnumerable<T>) {
