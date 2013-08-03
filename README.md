@@ -13,7 +13,7 @@ Our aim is to extend TypeScript with this module that ensure well-known collecti
 	* https://npmjs.org/package/qunit
 	* https://github.com/kof/node-qunit
 
-## Compile ##
+## Build ##
 
 ### Using commandline ###
 
