@@ -181,12 +181,12 @@ module Collections {
 			return this;
 		}
 
-		public getRange(param: { index: number; count?: number; }) {
+		public getRange(index: number, count?: number) {
 			var result = new List<T>();
 
-			var end = param.count ? param.index + param.count : this.list.length;
+			var end = count ? index + count : this.list.length;
 
-			for (var i = param.index; i < end; ++i) {
+			for (var i = index; i < end; ++i) {
 				result.add(this.list[i]);
 			}
 
