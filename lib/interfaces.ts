@@ -67,5 +67,4 @@ export module Collections {
 		equals(x: T, y: T): boolean;
 		getHashCode(obj: T): number;
 	}
-	var a = 10;
 }

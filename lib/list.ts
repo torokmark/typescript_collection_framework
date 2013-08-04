@@ -2,8 +2,8 @@
 
 import my = require("interfaces");
 
-module Collections {
-	class ListEnumerator<T> implements my.Collections.IEnumerator<T> {
+export module Collections {
+	export class ListEnumerator<T> implements my.Collections.IEnumerator<T> {
 		private list: my.Collections.IList<T>;
 		private index: number;
 
@@ -32,6 +32,7 @@ module Collections {
 		private list: T[];
 
 		constructor(collection?: my.Collections.IEnumerable<T>) {
+			this.list = [];
 			if (collection)
 				this.initializeFromCollection(collection);
 		}
