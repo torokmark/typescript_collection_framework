@@ -1,5 +1,6 @@
-export class Element {
+class NodeElement {
     private n: number;
+
     constructor(n: number) {
         this.n = n;
     }
