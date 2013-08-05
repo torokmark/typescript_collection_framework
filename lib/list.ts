@@ -1,199 +1,170 @@
 ///<reference path="interfaces.ts" />
 
-import my = require("interfaces");
+module Collections {
+    export class List<T> implements Collections.IList<T> {
+        private list: T[];
 
-export module Collections {
-	export class ListEnumerator<T> implements my.Collections.IEnumerator<T> {
-		private list: my.Collections.IList<T>;
-		private index: number;
+        constructor(collection?: Collections.IEnumerable<T>) {
+            this.list = [];
+            if (collection)
+                this.initializeFromCollection(collection);
+        }
 
-		constructor(list: my.Collections.IList<T>) {
-			this.list = list;
-			this.index = 0;
-		}
+        private initializeFromCollection(collection: Collections.IEnumerable<T>) {
+            var enumerator = collection.getEnumerator();
+            enumerator.reset();
+            
+            while (enumerator.moveNext()) {
+                this.add(enumerator.current);
+            }
 
-		public reset() {
-			this.index = 0;
-			return this;
-		}
+            return this;
+        }
 
-		public moveNext(): boolean {
-			var result = this.index < this.list.count;
-			this.index++;
-			return result;
-		}
+        public at(index: number): T {
+            return this.list[index];
+        }
+        
+        public indexOf(item: T): number {
+            return this.list.indexOf(item);
+        }
 
-		public get current(): T {
-			return this.list.at(this.index);
-		}
-	}
+        public insert(index: number, item: T) {
+            this.list.splice(index, 0, item);
+            return this;
+        }
 
-	export class List<T> implements my.Collections.IList<T> {
-		private list: T[];
+        public remove(item: T) {
+            var index = this.indexOf(item);
+            if (index !== -1)
+                this.removeAt(index);
 
-		constructor(collection?: my.Collections.IEnumerable<T>) {
-			this.list = [];
-			if (collection)
-				this.initializeFromCollection(collection);
-		}
+            return this;
+        }
 
-		private initializeFromCollection(collection: my.Collections.IEnumerable<T>) {
-			var enumerator = collection.getEnumerator();
-	        enumerator.reset();
-	        
-	        while (enumerator.moveNext()) {
-	            this.add(enumerator.current);
-	        }
+        public removeAt(index: number) {
+            this.list.splice(index, 1);
+            return this;
+        }
 
-	        return this;
-		}
+        public get count(): number {
+            return this.list.length;
+        }
 
-		public at(index: number): T {
-			return this.list[index];
-		}
-		
-		public indexOf(item: T): number {
-			return this.list.indexOf(item);
-		}
+        public get isReadOnly(): boolean {
+            return false;
+        }
 
-		public insert(index: number, item: T) {
-			this.list.splice(index, 0, item);
-			return this;
-		}
+        public add(item: T) {
+            this.list.push(item);
+            return this;
+        }
 
-		public remove(item: T) {
-			var index = this.indexOf(item);
-			if (index !== -1)
-				this.removeAt(index);
+        public clear() {
+            this.list = [];
+            return this;
+        }
 
-			return this;
-		}
+        public contains(item: T): boolean {
+            return this.indexOf(item) !== -1;
+        }
 
-		public removeAt(index: number) {
-			this.list.splice(index, 1);
-			return this;
-		}
+        public copyTo(array: T[], arrayIndex: number) {
+            if (!array)
+                throw "array must be defined!";
+            for (var i = arrayIndex; i < array.length; ++i) {
+                this.add(array[i]);
+            }
+            return this;
+        }
 
-		public get count(): number {
-			return this.list.length;
-		}	
+        public getEnumerator() : Collections.IEnumerator<T> {
+            return this.list.getEnumerator();
+        }
 
-		public get isReadOnly(): boolean {
-			return false;
-		}	
+        public toArray(): T[] {
+            return this.list;
+        }
 
-		public add(item: T) {
-			this.list.push(item);
-			return this;
-		}
+        public exists(match: (item: T) => boolean): boolean {
+            var result = false;
+            var enumerator = this.getEnumerator().reset();
 
-		public clear() {
-			this.list = [];
-			return this;
-		}
+            while (enumerator.moveNext() && result) {
+                result = match(enumerator.current);
+            }
 
-		public contains(item: T): boolean {
-			return this.indexOf(item) !== -1;
-		}
+            return result;
+        }
 
-		public copyTo(array: T[], arrayIndex: number) {
-			if (!array)
-				throw "array must be defined!";
-			for (var i = arrayIndex; i < array.length; ++i) {
-				this.add(array[i]);
-			}
-			return this;
-		}
+        public find(match: (item: T) => boolean): T {
+            for (var i = 0; i < this.list.length; ++i) {
+                if (match(this.list[i]))
+                    return this.list[i];
+            }
+            return undefined;
+        }
 
-		public getEnumerator() {
-			return new ListEnumerator<T>(this);
-		}
+        public findAll(match: (item: T) => boolean): List<T> {
+            var result = new List<T>();
 
-		public toArray(): T[] {
-			return this.list;
-		}
+            for (var i = 0; i < this.list.length; ++i) {
+                if (match(this.list[i]))
+                    result.add(this.list[i]);
+            }
 
-		public exists(match: (item: T) => boolean) : boolean {
-			var result = false;
-			var enumerator = this.getEnumerator().reset();
+            return result;
+        }
 
-			while (enumerator.moveNext() && result) {
-				result = match(enumerator.current);
-			}
+        public findIndex(param: { startIndex?: number; count?: number; match: (item: T) => boolean; }): number {
+            if (!param.startIndex)
+                param.startIndex = 0;
 
-			return result;
-		}
+            if (!param.count)
+                param.count = 1;
 
-		public find(match: (item: T) => boolean) : T {
-			for (var i = 0; i < this.list.length; ++i) {
-				if (match(this.list[i]))
-					return this.list[i];
-			}
-			return undefined;
-		}
+            var found = 0;
 
-		public findAll(match: (item: T) => boolean) : List<T> {
-			var result = new List<T>();
+            for (var i = 0; i < this.list.length; ++i) {
+                if (param.match(this.list[i])) {
+                    found++;
+                    if (found === param.count)
+                        return i;
+                }
+            }
+            
+            return -1;
+        }
 
-			for (var i = 0; i < this.list.length; ++i) {
-				if (match(this.list[i]))
-					result.add(this.list[i]);
-			}
+        public findLast(match: (item: T) => boolean): T {
+            for (var i = (this.list.length - 1); i >= 0; --i) {
+                if (match(this.list[i]))
+                    return this.list[i];
+            }
+            return undefined;
+        }
 
-			return result;
-		}
+        public forEach(action: (item: T) => void ) {
+            if (!action)
+                throw "'action' parameter of 'forEach' must be defined!";
 
-		public findIndex(param: { startIndex?: number; count?: number; match: (item: T) => boolean; }): number {
-			if (!param.startIndex)
-				param.startIndex = 0;
+            for (var i = 0; i < this.list.length; ++i) {
+                action(this.list[i]);
+            }
 
-			if (!param.count)
-				param.count = 1;
+            return this;
+        }
 
-			var found = 0;
+        public getRange(index: number, count?: number) {
+            var result = new List<T>();
 
-			for (var i = 0; i < this.list.length; ++i) {
-				if (param.match(this.list[i])) {
-					found++;
-					if (found === param.count)
-						return i;
-				}			
-			}
-						
-			return -1;
-		}
+            var end = count ? index + count : this.list.length;
 
-		public findLast(match: (item: T) => boolean) : T {
-			for (var i = (this.list.length - 1); i >= 0; --i) {
-				if (match(this.list[i]))
-					return this.list[i];
-			}
-			return undefined;
-		}
+            for (var i = index; i < end; ++i) {
+                result.add(this.list[i]);
+            }
 
-		public forEach(action: (item: T) => void) {
-			if (!action)
-				throw "'action' parameter of 'forEach' must be defined!";
-
-			for (var i = 0; i < this.list.length; ++i) {
-				action(this.list[i]);
-			}
-
-			return this;
-		}
-
-		public getRange(index: number, count?: number) {
-			var result = new List<T>();
-
-			var end = count ? index + count : this.list.length;
-
-			for (var i = index; i < end; ++i) {
-				result.add(this.list[i]);
-			}
-
-			return result;
-		}
-
-
-	}
+            return result;
+        }
+    }
 }

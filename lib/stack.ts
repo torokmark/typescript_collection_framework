@@ -1,10 +1,8 @@
 ///<reference path="interfaces.ts" />
 
-import my = require("interfaces");
-
 module Collections {
 
-    class StackEnumerator<T> implements my.Collections.IEnumerator<T> {
+    class StackEnumerator<T> implements Collections.IEnumerator<T> {
         private stack: Stack<T>;
         private index: number;
 
@@ -29,10 +27,10 @@ module Collections {
         }
     }
 
-    export class Stack<T> implements my.Collections.IEnumerable<T>, my.Collections.ICollection<T> {
+    export class Stack<T> implements Collections.IEnumerable<T>, Collections.ICollection<T> {
         private array: T[];
 
-        getEnumerator() : my.Collections.IEnumerator<T> {
+        getEnumerator() : Collections.IEnumerator<T> {
             return new StackEnumerator<T>(this);
         }
 
@@ -94,7 +92,7 @@ module Collections {
             return this.array;
         }
 
-        private initializeFromCollection(collection: my.Collections.IEnumerable<T>) {
+        private initializeFromCollection(collection: Collections.IEnumerable<T>) {
             var enumerator = collection.getEnumerator();
             enumerator.reset();
             
@@ -105,7 +103,7 @@ module Collections {
             return this;
         }
 
-        public constructor(collection?: my.Collections.IEnumerable<T>) {
+        public constructor(collection?: Collections.IEnumerable<T>) {
             if (collection)
                 this.initializeFromCollection(collection);
         }

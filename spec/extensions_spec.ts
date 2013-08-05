@@ -1,7 +1,5 @@
 ///<reference path="../qunit.d.ts" />
 
-import my = require("../lib/extensions");
-
 QUnit.module("Test of HashSet", {
     setup: function () { },
     teardown: function () { }
