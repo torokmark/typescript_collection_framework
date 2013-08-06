@@ -84,7 +84,7 @@ module Collections {
         }
 
         public get current(): T {
-            return this.array[this.index];
+            return this.array[this.index - 1];
         }
 
         public moveNext(): boolean {

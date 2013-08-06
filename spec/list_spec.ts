@@ -27,6 +27,9 @@ test("Init list with a collection", function() {
 
     equal(list.count, 4, "Count should be 4");
     equal(list.count, collection.count, "Count of 'list' should be equal count of 'collection'");
+
+    deepEqual(list.toArray(), [0, 1, 2, 3]);
+    deepEqual(collection.toArray(), [0, 1, 2, 3]);
 });
 
 test("Add items to list", function() {

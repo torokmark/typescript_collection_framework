@@ -1,6 +1,7 @@
 ///<reference path="interfaces.ts" />
 
 module Collections {
+
     export class List<T> implements Collections.IList<T> {
         private list: T[];
 
@@ -166,5 +167,53 @@ module Collections {
 
             return result;
         }
-    }
+
+        public insertRange(index: number, collection: IEnumerable<T>) {
+        	var enumerator = collection.getEnumerator().reset();
+        	
+        	while (enumerator.moveNext()) {
+        		this.insert(index, enumerator.current);
+        		index++;
+        	}
+
+        	return this;
+        }
+
+        public lastIndexOf(param: { item: T; index?: number; count?: number; }) {
+        	if (!param.count)
+        		param.count = 1;
+        	if (!param.index)
+        		param.index = this.list.length - 1;
+
+        	for (var i = param.index; i >= 0; i--) {
+        		if (param.item === this.list[i])
+        			param.count--;
+        		if (param.count === 0)
+        			return i;
+        	}
+
+        	return -1;
+        }
+
+        public removeRange(index: number, count: number) {
+        	this.list.splice(index, count);
+        	return this;
+        }
+
+        public reverse(index?: number, count?: number) {
+        	if (!index)
+        		index = 0;
+        	if (!count)
+        		count = this.list.length;
+
+        	if (!count && !index)
+        		this.list.reverse();
+        	else {
+        		var range = this.getRange(index, count);
+        		this.removeRange(index, count)
+        		    .insertRange(index, range);
+        	}
+        	return this;
+        }
+    } 
 }
