@@ -1,88 +1,111 @@
 ///<reference path="interfaces.ts" />
 
 module Collections {
-	export class Stack<T> implements IEnumerable<T>, ICollection<T> {
-		private array: T[];
 
-		getEnumerator() : IEnumerator<T> {
-			return undefined;
-		}
+    class StackEnumerator<T> implements Collections.IEnumerator<T> {
+        private stack: Stack<T>;
+        private index: number;
 
-		get count(): number {
-			return this.array.length;
-		}	
+        constructor(stack: Stack<T>) {
+            this.stack = stack;
+            this.reset();
+        }
 
-		get isReadOnly(): boolean {
-			return false;
-		}	
+        public reset() {
+            this.index = 0;
+            return this;
+        }
 
-		add(item: T) {
-			this.array.push(item);
-			return this;
-		}
+        public moveNext(): boolean {
+            var result = this.index < this.stack.count;
+            this.index++;
+            return result; 
+        }
 
-		clear() {
-			this.array = [];
-			return this;
-		}
+        public get current(): T {
+            return this.stack.toArray()[this.index];
+        }
+    }
 
-		contains(item: T): boolean {
-			for (var key in this.array) {
-				if (this.array[key] === item)
-					return true;
-			}
-			return false;
-		}
+    export class Stack<T> implements Collections.IEnumerable<T>, Collections.ICollection<T> {
+        private array: T[];
 
-		copyTo(array: T[], arrayIndex: number) {
-			for (var i = arrayIndex; i < array.length; ++i) {
-				this.add(array[i]);
-			}
+        getEnumerator() : Collections.IEnumerator<T> {
+            return new StackEnumerator<T>(this);
+        }
 
-			return this;
-		}
+        get count(): number {
+            return this.array.length;
+        }   
 
-		remove(item: T): boolean {
-			var index = this.array.indexOf(item);
-			if (index === -1)
-				return false;
-			this.array.splice(index, 1);
-			return true;
-		}
+        get isReadOnly(): boolean {
+            return false;
+        }   
 
-		pop(): T {
-			return this.array.pop();
-		}
+        add(item: T) {
+            this.array.push(item);
+            return this;
+        }
 
-		peek(): T {
-			return this.array[this.array.length - 1];
-		}
+        clear() {
+            this.array = [];
+            return this;
+        }
 
-		push(item: T) {
-			this.array.push(item);
-			return this;
-		}
+        contains(item: T): boolean {
+            for (var key in this.array) {
+                if (this.array[key] === item)
+                    return true;
+            }
+            return false;
+        }
 
-		toArray(): T[] {
-			return this.array;
-		}
+        copyTo(array: T[], arrayIndex: number) {
+            for (var i = arrayIndex; i < array.length; ++i) {
+                this.add(array[i]);
+            }
 
-		private initializeFromCollection(collection: IEnumerable<T>) {
-			var enumerator = collection.getEnumerator();
-			enumerator.reset();
-			
-			while (enumerator.moveNext()) {
-				this.add(enumerator.current);
-			}
+            return this;
+        }
 
-			return this;
-		}
+        remove(item: T) {
+            var index = this.array.indexOf(item);
+            if (index !== -1)
+                this.array.splice(index, 1);
+            return this;
+        }
 
-		public constructor(collection?: IEnumerable<T>) {
-			if (collection)
-				this.initializeFromCollection(collection);
-		}
-	}
+        pop(): T {
+            return this.array.pop();
+        }
 
-	var stack: Stack<number> = new Stack<number>();
+        peek(): T {
+            return this.array[this.array.length - 1];
+        }
+
+        push(item: T) {
+            this.array.push(item);
+            return this;
+        }
+
+        toArray(): T[] {
+            return this.array;
+        }
+
+        private initializeFromCollection(collection: Collections.IEnumerable<T>) {
+            var enumerator = collection.getEnumerator();
+            enumerator.reset();
+            
+            while (enumerator.moveNext()) {
+                this.add(enumerator.current);
+            }
+
+            return this;
+        }
+
+        public constructor(collection?: Collections.IEnumerable<T>) {
+            if (collection)
+                this.initializeFromCollection(collection);
+        }
+    }
 }
