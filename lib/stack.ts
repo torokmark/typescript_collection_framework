@@ -2,36 +2,11 @@
 
 module Collections {
 
-    class StackEnumerator<T> implements Collections.IEnumerator<T> {
-        private stack: Stack<T>;
-        private index: number;
-
-        constructor(stack: Stack<T>) {
-            this.stack = stack;
-            this.reset();
-        }
-
-        public reset() {
-            this.index = 0;
-            return this;
-        }
-
-        public moveNext(): boolean {
-            var result = this.index < this.stack.count;
-            this.index++;
-            return result; 
-        }
-
-        public get current(): T {
-            return this.stack.toArray()[this.index];
-        }
-    }
-
     export class Stack<T> implements Collections.IEnumerable<T>, Collections.ICollection<T> {
         private array: T[];
 
         getEnumerator() : Collections.IEnumerator<T> {
-            return new StackEnumerator<T>(this);
+            return this.array.getEnumerator();
         }
 
         get count(): number {
