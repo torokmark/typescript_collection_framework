@@ -23,15 +23,14 @@ Our aim is to extend TypeScript with this module that ensure well-known collecti
 
 #### qunit ####
 
-	tsc --target ES5 .\spec\hashset_spec.ts
+	tsc --target ES5 .\spec\hashset_spec.ts --out hash.js
 
 It generates `.js` files.
 
-	qunit -c .\lib\hashset.js -t .\spec\hashset_spec.js
+	qunit -c .\hash.js -t .\hash.js
 
 
-### Using Visual Studio ###
-
+### Structure ###
 
 
 
