@@ -19,6 +19,7 @@ module Collections {
             return false;
         }
 
+        /*
         get current(): T {
             this.index += 1;
             if (this.index === this.set.length) {
@@ -26,6 +27,7 @@ module Collections {
             }
             return this.set[this.index];
         }
+        */
 
         public add(item: T) {
             if (!this.contains(item)) {
@@ -221,15 +223,16 @@ module Collections {
             return this;
         }
 
-
+        /*
         public reset(): void {
             this.index = -1;
         }
+        
 
         public moveNext(): boolean {
             return this.index < this.set.length - 1;
         }
-
+        */
 
         private initializeFromCollection(collection: Collections.IEnumerable<T>): HashSet<T> {
             var enumerator = collection.getEnumerator();
