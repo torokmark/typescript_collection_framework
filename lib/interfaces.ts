@@ -4,6 +4,10 @@ module Collections {
         compare(x: T, y: T): number;
     }
 
+    export interface IComparable<T> {
+        compareTo(x: T): number;
+    }
+
     export interface IEnumerator<T> {
         reset();
         moveNext(): boolean;
@@ -23,7 +27,7 @@ module Collections {
         add(item: T): ICollection<T>;
         clear(): ICollection<T>;
         contains(item: T): boolean;
-        copyTo(array: T[], arrayIndex: number): ICollection<T>;
+        copyTo(startIndex?: number, endIndex?: number): ICollection<T>;
         remove(item: T): ICollection<T>;
     }
 

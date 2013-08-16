@@ -86,18 +86,18 @@ test("Check an element whether is in the hashset or not using by `contain` metho
 
 test("Copy elements into the hashset using by `copyTo` method", function () {
     var hashSet: Collections.HashSet<NodeElement> = new Collections.HashSet(),
-        arr: NodeElement[] = [],
+        coll: Collections.ICollection<NodeElement>,
         e1: NodeElement = new NodeElement(1);
 
-    arr.push(e1);
-    arr.push(new NodeElement(2));
-    arr.push(new NodeElement(2));
-    arr.push(new NodeElement(2));
+    hashSet.add(e1);
+    hashSet.add(new NodeElement(2));
+    hashSet.add(new NodeElement(2));
+    hashSet.add(new NodeElement(2));
 
-    hashSet.copyTo(arr, 1);
+    coll = hashSet.copyTo(1);
 
-    equal(false, hashSet.contains(e1), "should contain the given element!");
-    equal(3, hashSet.count, "should contain 3 elements");
+    equal(false, coll.contains(e1), "should contain the given element!");
+    equal(3, coll.count, "should contain 3 elements");
 });
 
 test("Remove elements from the hashset except with some of them using `exceptWith` method", function () {

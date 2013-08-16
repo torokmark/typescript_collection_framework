@@ -45,12 +45,14 @@ module Collections {
             return this.set.indexOf(t) > -1;
         }
 
-        public copyTo(array: T[], arrayIndex: number) {
-            for (var i = arrayIndex; i < array.length; i += 1) {
-                this.add(array[i]);
-            }
+        public copyTo(startIndex?: number) : ICollection<T> {
+            var coll: ICollection<T> = new HashSet(),
+                start: number        = (startIndex !== null && startIndex !== undefined ? startIndex : 0);
 
-            return this;
+            for (var i = start; i < this.set.length; i += 1) {
+                coll.add(this.set[i]);
+            }
+            return coll;
         }
 
         public exceptWith(other: Collections.IEnumerable<T>): Collections.ISet<T> {
