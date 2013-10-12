@@ -58,14 +58,15 @@ module Collections {
         value: TValue;
     }
 
-    export interface IDictionary<TKey, TValue> extends ICollection<IKeyValuePair<TKey, TValue>>,
-    IEnumerable<IKeyValuePair<TKey, TValue>> {
+    //export interface IDictionary<TKey, TValue> extends ICollection<IKeyValuePair<TKey, TValue>>,
+    export interface IDictionary<TKey, TValue> extends IEnumerable<IKeyValuePair<TKey, TValue>> {
         at(key: TKey): TValue;
-        keys: ICollection<TKey>;
-        values: ICollection<TValue>;
+        keys: TKey[];
+        values: TValue[];
         containsKey(key: TKey): boolean;
         removeByKey(key: TKey): IDictionary<TKey, TValue>;
-        tryGetValue(key: TKey, callbackValue: (value: TValue) => void ): boolean;
+        //tryGetValue(key: TKey, callbackValue: (value: TValue) => void ): boolean;
+        tryGetValue(key: TKey, value: TValue): boolean;
     }
 
     export interface IEqualityComparer<T> {
@@ -105,6 +106,29 @@ module Collections {
     Array.prototype.toArray = function () {
         return this;
     };
+
+
+    /*
+    Object.prototype.getHashCode = function () : number {
+        var key: any,
+            properties: any[] = Object.getOwnPropertyNames(this),
+            result: number = 0,
+            c: any;
+
+        for (key in properties) {
+            c = Number(this[key]);
+            if (!isNaN(c)) {
+                result = 37 * result + c;
+            } else if (typeof this[key] === "object" && this[key] !== null) {
+                result = 37 * result + this[key].getHashCode();
+            }
+        }
+
+        return result;
+    }
+    */
+
 }
 
 interface Array<T> extends Collections.IEnumerable<T> { }
+
